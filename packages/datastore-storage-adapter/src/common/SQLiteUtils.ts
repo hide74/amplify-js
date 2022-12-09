@@ -218,7 +218,8 @@ export function modelInsertStatement(
 	const keys = keysFromModel(model);
 	const [paramaterized, values] = valuesFromModel(model);
 
-	const insertStatement = `INSERT INTO "${tableName}" (${keys}) VALUES (${paramaterized})`;
+	// const insertStatement = `INSERT INTO "${tableName}" (${keys}) VALUES (${paramaterized})`;
+	const insertStatement = `REPLACE INTO "${tableName}" (${keys}) VALUES (${paramaterized})`;
 
 	return [insertStatement, values];
 }
