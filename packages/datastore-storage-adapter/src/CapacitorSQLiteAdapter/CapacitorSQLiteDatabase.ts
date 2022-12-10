@@ -5,7 +5,7 @@ import { CommonSQLiteDatabase, ParameterizedStatement } from '../common/types';
 import { SQLiteDBConnection } from '@capacitor-community/sqlite';
 import { sqlite } from './CapacitorSQLiteAdapter';
 
-const logger = new Logger('CapacitorSQLiteDatabase');
+const logger = new Logger('CapacitorSQLiteDatabase', 'DEBUG');
 
 class CapacitorSQLiteDatabase implements CommonSQLiteDatabase {
 	private db: SQLiteDBConnection;
@@ -33,13 +33,12 @@ class CapacitorSQLiteDatabase implements CommonSQLiteDatabase {
 
 	public async clear(): Promise<void> {
 		logger.debug('> clear');
-		await this.closeDB();
-		logger.debug('> Deleting database');
-		await sqlite.closeConnection(DB_NAME);
+		await this.db.close();
 		if (await this.db.isExists()) {
 			await this.db.delete();
+			logger.debug('> Database deleted');
 		}
-		logger.debug('> Database deleted');
+		await sqlite.closeConnection(DB_NAME);
 	}
 
 	public async get<T extends PersistentModel>(
@@ -146,16 +145,6 @@ class CapacitorSQLiteDatabase implements CommonSQLiteDatabase {
 		for (const statement of statements) {
 			logger.debug(`> [executeStatements] stattement: ${statement}`);
 			await this.db.execute(statement);
-		}
-	}
-
-	private async closeDB() {
-		if (this.db) {
-			logger.debug('> Closing Database');
-			await this.db.close();
-			logger.debug('> Database closed');
-			this.db = undefined;
-			await sqlite.closeConnection(DB_NAME, false);
 		}
 	}
 }
