@@ -5,7 +5,7 @@ import { CommonSQLiteDatabase, ParameterizedStatement } from '../common/types';
 import { SQLiteDBConnection } from '@capacitor-community/sqlite';
 import { sqlite } from './CapacitorSQLiteAdapter';
 
-const logger = new Logger('CapacitorSQLiteDatabase', 'DEBUG');
+const logger = new Logger('CapacitorSQLiteDatabase');
 
 class CapacitorSQLiteDatabase implements CommonSQLiteDatabase {
 	private db: SQLiteDBConnection;
